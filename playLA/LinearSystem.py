@@ -5,12 +5,18 @@ from ._global import is_zero
 class LinearSystem:
 
     def __init__(self, A, b):
-        assert A.row_num() == len(b), "矩阵A行数必须等于向量b长度"
         self._m = A.row_num()
         self._n = A.col_num()
 
-        # 每个向量表示一个线性方程
-        self.Ab = [Vector(A.row_vector(i).underlying_list() + [b[i]]) for i in range(self._m)]
+        if isinstance(b, Vector):
+            assert A.row_num() == len(b), "矩阵A行数必须等于向量b长度"
+            # 每个向量表示一个线性方程
+            self.Ab = [Vector(A.row_vector(i).underlying_list() + [b[i]]) for i in range(self._m)]
+
+        if isinstance(b, Matrix):
+            assert A.row_num() == b.row_num() and A.col_num() == b.col_num(), "增广矩阵行列数必须与矩阵A相等"
+            self.Ab = [Vector(A.row_vector(i).underlying_list() + b.row_vector(i).underlying_list()) for i in range(self._m)]
+
         # 记录主元的位置
         self.pivots = []
 
@@ -75,3 +81,17 @@ class LinearSystem:
         for i in range(self._m):
             print(" ".join(str(self.Ab[i][j]) for j in range(self._n)), end= " ")
             print("|", self.Ab[i][-1])
+
+def inv(A):
+    """高斯消元法求矩阵的逆"""
+    if A.row_num() != A.col_num():
+        return None
+
+    n = A.row_num()
+    ls = LinearSystem(A, Matrix.identity(n))
+    if not ls.gauss_jordan_elimination():
+        return None
+
+    # 取到高斯消元法之后的 增广矩阵 就是逆矩阵
+    invA = [[row[i] for i in range(n, 2*n)] for row in ls.Ab]
+    return Matrix(invA)

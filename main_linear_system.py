@@ -1,6 +1,7 @@
 from playLA.Vector import Vector
 from playLA.Matrix import Matrix
 from playLA.LinearSystem import LinearSystem
+from playLA.LinearSystem import inv
 
 if __name__ == '__main__':
     A = Matrix([[1, 2, 4], [3, 7, 2], [2, 3, 3]])
@@ -32,3 +33,10 @@ if __name__ == '__main__':
     if not ls8.gauss_jordan_elimination():
         print("没有解")
     ls8.fancy_print()
+
+    A = Matrix([[1,2],[3,4]])
+    invA = inv(A)
+    print(A)
+    print(invA)
+    print("A.dot(invA)\n {}".format(A.dot(invA)))
+    print("invA.dot(A)\n {}".format(invA.dot(A)))
