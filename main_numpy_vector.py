@@ -8,6 +8,9 @@ if __name__ == '__main__':
     print(vec2)
 
     # 创建
-    print(np.zeros(5))
+    print(np.zeros(3))
     print(np.ones(5))
     print(np.full(3, 23))
+
+    # 向量点乘
+    print("ve1.dot(vec2) = {}".format(vec1.dot(vec2)))

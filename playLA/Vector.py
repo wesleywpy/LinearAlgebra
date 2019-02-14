@@ -25,7 +25,7 @@ class Vector:
         # return 1 / self.norm() * Vector(self._values)
         return Vector(self._values) / self.norm()
 
-    def  dot(self, another):
+    def dot(self, another):
         """向量点乘, 返回结果标量"""
         assert len(self) == len(another), "Error in Dot Product, Length of vectors must be same"
         return sum(a * b for a, b in zip(self, another))
